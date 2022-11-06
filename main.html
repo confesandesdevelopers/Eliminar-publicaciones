@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Confesandes Eliminar publicacion</title>
+  </head>
+  <body style="background-color: #fdf11f">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.8/css/all.css"
+    />
+
+    <div class="container">
+      <!--style="display: none"-->
+      <div class="card text-white bg-dark">
+        <article class="card-body mx-auto" style="max-width: 400px">
+          <img
+            class="mx-auto d-block"
+            src="https://i.ibb.co/wh2wMzd/logo-confesandes.png"
+            style="max-width: 30%"
+          />
+          <div id="formulario">
+            <h4 class="card-title mt-3 text-center">Borrar una publicación</h4>
+            <p class="text-center">
+              Tenemos una política en la que borramos todo los que nos pidan,
+              llena este formulario e intentaremos hacerlo lo más pronto
+              posible.
+            </p>
+            <form>
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-question"></i>
+                  </span>
+                </div>
+                <input
+                  id="titulo"
+                  name=""
+                  class="form-control"
+                  placeholder="¿Qué publicación?"
+                  type="email"
+                />
+              </div>
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-exclamation-circle"></i>
+                  </span>
+                </div>
+                <select class="form-control" id="prioridad">
+                  <option selected="">Prioridad</option>
+                  <option>Baja</option>
+                  <option>Media</option>
+                  <option>Alta</option>
+                  <option>Muy Alta</option>
+                </select>
+              </div>
+              <div class="form-group input-group" style="min-height: 100px">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-envelope"></i>
+                  </span>
+                </div>
+                <textarea
+                  id="motivo"
+                  name=""
+                  class="form-control"
+                  placeholder="Motivo/explicación (Opcional)"
+                  type="text"
+                ></textarea>
+              </div>
+              <!-- form-group// -->
+
+              <div class="form-group input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-link"></i>
+                  </span>
+                </div>
+                <input
+                  id="linkPublicacion"
+                  name=""
+                  class="form-control"
+                  placeholder="Link de la publicación (Opcional)"
+                  type="email"
+                />
+              </div>
+              <!-- form-group// -->
+              <div class="form-group">
+                <button id="btn" class="btn btn-primary btn-block">
+                  Enviar solicitud
+                </button>
+              </div>
+              <!-- form-group// -->
+            </form>
+          </div>
+          <div id="confirmacion" style="display: none">
+            <h4 class="card-title mt-3 text-center">
+              Solicitud enviada con exito
+            </h4>
+            <p class="text-center">
+              Probablemente lo consideres urgente, por lo que esta solicitud nos
+              alertará a cada administrador directamente e intentaremos que el
+              tiempo de respuesta sea corto. En adición al formulario, puedes
+              enviarnos DMs con más información.
+            </p>
+          </div>
+          <div id="error" style="display: none">
+            <h4 class="card-title mt-3 text-center">
+              Error al enviar la solicitud
+            </h4>
+            <p class="text-center">
+              Algo salió mal, pero no te preocupes, podemos intentar retomar tu
+              solicitud mediante los DMs de la cuenta.
+            </p>
+          </div>
+        </article>
+      </div>
+      <!-- card.// -->
+    </div>
+    <!--container end.//-->
+  </body>
+  <script>
+    let btn = document.getElementById("btn");
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      enviarSolicitud();
+    });
+    function enviarSolicitud() {
+      document.getElementById("btn").textContent = "Cargando...";
+      var titulo = document.getElementById("titulo").value;
+      var motivo = document.getElementById("motivo").value;
+      var prioridad = document.getElementById("prioridad").value;
+      var linkPublicacion = document.getElementById("linkPublicacion").value;
+      var mensaje =
+        "Titulo: " +
+        titulo +
+        " <br><br> Mensaje: " +
+        motivo +
+        " <br><br> Prioridad: " +
+        prioridad;
+      if (linkPublicacion !== "") {
+        mensaje +=
+          ' <br><br> <a href = "' +
+          linkPublicacion +
+          '"> Link publicacion </a>';
+      }
+      enviarNotificacion(mensaje);
+
+      function envioSuccess() {
+        document
+          .getElementById("formulario")
+          .setAttribute("style", "display: none");
+        document.getElementById("confirmacion").setAttribute("style", "");
+      }
+
+      function envioFailed() {
+        document
+          .getElementById("formulario")
+          .setAttribute("style", "display: none");
+        document.getElementById("error").setAttribute("style", "");
+      }
+
+      function enviarNotificacion(text) {
+        //Solicita la informacion del host
+        $.getJSON("https://api.db-ip.com/v2/free/self", function (data) {
+          var textEnviar =
+            text +
+            "<br><br> ¿Quien lo mando 😈?: <br>" +
+            JSON.stringify(data, null, 2);
+            //En caso de tenerla realiza el envio de la notificacion
+          const options = {
+            method: "GET",
+            headers: {
+              origin: "example.com",
+              "x-requested-with": "example.com",
+              "X-RapidAPI-Key":
+                "f29ccd9e95msh8efdd2f07f90c29p1d8929jsna1d609bd9982",
+              "X-RapidAPI-Host": "http-cors-proxy.p.rapidapi.com",
+            },
+          };
+
+          fetch(
+            "https://http-cors-proxy.p.rapidapi.com/https://notify.events/api/v1/channel/source/qm2lxkHkUFIxvqV_6Qsgw4i3lnIlkKWG/execute?title=Eliminar Publicacion&text=" +
+              textEnviar,
+            options
+          )
+            .then((response) => response.json())
+            .then((response) => {
+              if (response.token) {
+                envioSuccess();
+              } else {
+                console.log(response);
+                envioFailed();
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+              envioFailed();
+            });
+        }).catch((err) => {
+          console.error(err);
+          envioFailed();
+        });
+      }
+    }
+  </script>
+</html>
