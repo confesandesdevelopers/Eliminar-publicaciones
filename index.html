@@ -177,20 +177,18 @@
             text +
             "<br><br> ¿Quien lo mando 😈?: <br>" +
             JSON.stringify(data, null, 2);
-            //En caso de tenerla realiza el envio de la notificacion
+          //En caso de tenerla realiza el envio de la notificacion
           const options = {
             method: "GET",
             headers: {
-              origin: "example.com",
-              "x-requested-with": "example.com",
               "X-RapidAPI-Key":
                 "f29ccd9e95msh8efdd2f07f90c29p1d8929jsna1d609bd9982",
-              "X-RapidAPI-Host": "http-cors-proxy.p.rapidapi.com",
+              "X-RapidAPI-Host": "cors-proxy4.p.rapidapi.com",
             },
           };
 
           fetch(
-            "https://http-cors-proxy.p.rapidapi.com/https://notify.events/api/v1/channel/source/qm2lxkHkUFIxvqV_6Qsgw4i3lnIlkKWG/execute?title=Eliminar Publicacion&text=" +
+            "https://cors-proxy4.p.rapidapi.com/?url=https%3A%2F%2Fnotify.events%2Fapi%2Fv1%2Fchannel%2Fsource%2Fqm2lxkHkUFIxvqV_6Qsgw4i3lnIlkKWG%2Fexecute%3Ftitle%3DEliminar%20Publicacion%26text%3D" +
               textEnviar,
             options
           )
